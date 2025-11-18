@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Watermelon!</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    height:100vh;width:100%;
+    font-family:'Arial',sans-serif;
+    overflow:hidden;
+    background:linear-gradient(120deg,#ff9a9e,#fad0c4);
+    animation:gradientShift 15s ease infinite alternate;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+  }
+  @keyframes gradientShift{
+    0%{background:linear-gradient(120deg,#ff9a9e,#fad0c4);}
+    50%{background:linear-gradient(120deg,#a1c4fd,#c2e9fb);}
+    100%{background:linear-gradient(120deg,#ffecd2,#fcb69f);}
+  }
+
+  .section{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    max-width:90%;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 1s;
+  }
+  .section.show{opacity:1;pointer-events:auto;}
+
+  h1,h2{
+    font-size:3rem;
+    color:#fff;
+    text-shadow: 2px 2px 8px #000, 0 0 15px #ff69b4;
+    margin-bottom:20px;
+  }
+
+  .quote{
+    font-size:1.3rem;
+    line-height:1.8;
+    margin-bottom:30px;
+    color:#fff;
+    text-shadow: 2px 2px 6px #000, 0 0 10px #ff69b4;
+  }
+
+  .btn{
+    padding:12px 25px;
+    font-size:1.1rem;
+    border:none;border-radius:12px;
+    cursor:pointer;
+    background:#ff4081;color:#fff;
+    text-shadow:1px 1px 3px #000;
+    transition:0.3s;
+  }
+  .btn:hover{transform:scale(1.1);background:#e91e63;}
+
+  /* Balloons & Hearts */
+  .balloon,.heart{position:absolute;opacity:0.8;animation:float 6s ease-in-out infinite;}
+  .balloon{width:60px;height:80px;background: radial-gradient(circle at 30% 30%, #ff69b4,#ff1493);border-radius:50%;}
+  .balloon::after{content:'';position:absolute;bottom:-20px;left:50%;width:2px;height:20px;background:#555;}
+  .heart{width:50px;height:50px;background:red;transform:rotate(-45deg);}
+  .heart::before,.heart::after{content:"";position:absolute;width:50px;height:50px;background:red;border-radius:50%;}
+  .heart::before{top:-25px;left:0;}
+  .heart::after{top:0;left:25px;}
+  @keyframes float{
+    0%{transform:translateY(100vh) translateX(0) rotate(0deg);}
+    50%{transform:translateY(50vh) translateX(50px) rotate(20deg);}
+    100%{transform:translateY(-10vh) translateX(-50px) rotate(-20deg);}
+  }
+
+  /* Slideshow images - responsive */
+  .slideshow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90vw;   /* restrict overall width */
+    max-height: 70vh;  /* restrict overall height */
+    overflow-y: auto;  /* scroll if too tall */
+    margin: 0 auto;
+  }
+
+  .slideshow img {
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    max-width: 200px;   /* image width limit */
+    max-height: 150px;  /* image height limit */
+    object-fit: cover;  /* maintain aspect ratio */
+  }
+
+  .slideshow img:hover {
+    transform: scale(1.05);
+  }
+
+  #fullscreenImage{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.9);display:flex;
+    justify-content:center;align-items:center;
+    z-index:1000;display:none;cursor:pointer;
+  }
+  #fullscreenImage img{max-width:90%;max-height:90%;border-radius:15px;}
+</style>
+</head>
+<body>
+
+<!-- Front Page -->
+<div class="section show" id="frontPage">
+  <h1>Happy Birthday, Watermelon! 🎉💖</h1>
+  <div class="quote" id="quoteText"></div>
+  <button class="btn" onclick="showOptions()">Continue</button>
+  <audio id="birthdayMusic" autoplay loop>
+    <source src="birthday_music.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<!-- Options Section -->
+<div class="section" id="optionsSection">
+  <h1>Choose your surprise, Watermelon! 💖</h1>
+  <button class="btn" onclick="showContent('memories')">Our Memories</button>
+  <button class="btn" onclick="showContent('wishes')">Birthday Wishes</button>
+</div>
+
+<!-- Memories -->
+<div class="section" id="memories">
+  <h2>Our Memories 💖</h2>
+  <div class="slideshow" id="memoriesSlideshow">
+    <img src="memory1.jpg" alt="Memory 1">
+    <img src="memory2.jpg" alt="Memory 2">
+    <img src="memory3.jpg" alt="Memory 3">
+  </div>
+  <audio id="memoriesMusic" loop>
+    <source src="memories.mp3" type="audio/mpeg">
+  </audio>
+  <button class="btn" onclick="goBack()">Back</button>
+</div>
+
+<!-- Wishes -->
+<div class="section" id="wishes">
+  <h2>Birthday Wishes 🎉</h2>
+  <div class="slideshow" id="wishesSlideshow">
+    <img src="C:\Users\Nitro v15\OneDrive\Desktop\kriswin\6057001f1d0df4ee4959aa25eba1e4ee.jpg" alt="Wish 1">
+    <img src="C:\Users\Nitro v15\OneDrive\Desktop\kriswin\996834635e30e4484506095655a2c8bf.jpg" alt="Wish 2">
+    <img src="C:\Users\Nitro v15\OneDrive\Desktop\kriswin\34f1f8ba74e9064f9ca9598264f9b4b8.jpg" alt="Wish 3">
+    <img src="C:\Users\Nitro v15\OneDrive\Desktop\kriswin\55c39b60c672cb9126db2e28ee718260.jpg" alt="Wish 4">
+  </div>
+  <audio id="wishesMusic" loop>
+    <source src="C:\Users\Nitro v15\OneDrive\Desktop\kriswin\music.mp3" type="audio/mpeg">
+  </audio>
+  <button class="btn" onclick="goBack()">Back</button>
+</div>
+
+<!-- Fullscreen Image Viewer -->
+<div id="fullscreenImage" onclick="nextImage()">
+  <img id="fullImg" src="">
+</div>
+
+<script>
+const quotes=[
+  "Happy birthday to my person, my partner, my peace. 💕🎂",
+  "Loving you is the greatest gift. Happy birthday, my soulmate. 💖✨",
+  "You are my heart’s home. Wishing you the happiest birthday ever. 🏡❤️",
+  "I never believed in soulmates—until I met you. 🌟💘",
+  "Here’s to another year of laughter, love, and growing together. 😂❤️🌹",
+  "Thank you for being the love I never knew I needed. 💝🎉"
+];
+
+let quoteIndex=0;
+let charIndex=0;
+const quoteText=document.getElementById('quoteText');
+
+function typeQuote(){
+  if(quoteIndex<quotes.length){
+    if(charIndex<quotes[quoteIndex].length){
+      quoteText.innerHTML += quotes[quoteIndex][charIndex];
+      charIndex++;
+      setTimeout(typeQuote,50);
+    }else{
+      quoteText.innerHTML += "<br><br>";
+      quoteIndex++;
+      charIndex=0;
+      setTimeout(typeQuote,500);
+    }
+  }
+}
+typeQuote();
+
+// Balloons & Hearts
+const colors=['#ffd700','#ff4500','#1e90ff','#32cd32','#ff69b4'];
+const balloonArr=[],heartArr=[];
+[10,30,50,70,90].forEach((left,i)=>{
+  const b=document.createElement('div');b.classList.add('balloon');
+  b.style.left=left+'%'; b.style.animationDelay=i+'s';
+  document.body.appendChild(b); balloonArr.push(b);
+});
+[20,60].forEach((left,i)=>{
+  const h=document.createElement('div'); h.classList.add('heart');
+  h.style.left=left+'%'; h.style.animationDelay=(i+0.5)+'s';
+  document.body.appendChild(h); heartArr.push(h);
+});
+
+function showOptions(){
+  document.getElementById('frontPage').classList.remove('show');
+  document.getElementById('optionsSection').classList.add('show');
+  document.getElementById('birthdayMusic').pause();
+}
+
+function showContent(section){
+  document.getElementById('optionsSection').classList.remove('show');
+  document.getElementById(section).classList.add('show');
+  document.getElementById('memoriesMusic')?.pause();
+  document.getElementById('wishesMusic')?.pause();
+  if(section==='memories') document.getElementById('memoriesMusic').play();
+  else document.getElementById('wishesMusic').play();
+}
+
+// Go back to options
+function goBack(){
+  document.getElementById('optionsSection').classList.add('show');
+  document.getElementById('memories').classList.remove('show');
+  document.getElementById('wishes').classList.remove('show');
+  document.getElementById('memoriesMusic')?.pause();
+  document.getElementById('wishesMusic')?.pause();
+}
+
+// Fullscreen Image Viewer
+let currentImages=[],currentIndex=0;
+function setupFullscreen(slideshowId){
+  const imgs=document.querySelectorAll('#'+slideshowId+' img');
+  imgs.forEach((img,i)=>{
+    img.addEventListener('click',()=>{
+      currentImages=Array.from(imgs);
+      currentIndex=i;
+      document.getElementById('fullImg').src=currentImages[currentIndex].src;
+      document.getElementById('fullscreenImage').style.display='flex';
+    });
+  });
+}
+function nextImage(){
+  currentIndex=(currentIndex+1)%currentImages.length;
+  document.getElementById('fullImg').src=currentImages[currentIndex].src;
+  // Hide viewer if reached end
+  if(currentIndex===0) document.getElementById('fullscreenImage').style.display='none';
+}
+
+// Initialize fullscreen viewer for both slideshows
+setupFullscreen('memoriesSlideshow');
+setupFullscreen('wishesSlideshow');
+</script>
+</body>
+</html>
+
